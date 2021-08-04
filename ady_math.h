@@ -38,13 +38,11 @@ inline vec2 Vec2(float x, float y) {
 	return { x, y };
 }
 
-typedef struct ivec2 {
-	union {
-		struct { int32_t x; int32_t y; };
-		struct { int32_t u; int32_t v; };
-		int32_t data[2];
-	};
-} ivec2;
+union ivec2 {
+	struct { int32_t x; int32_t y; };
+	struct { int32_t u; int32_t v; };
+	int32_t data[2];
+};
 
 inline ivec2 IVec2(int32_t x, int32_t y) {
 	return { x, y };
@@ -54,7 +52,7 @@ inline int32_t Vec2To1DIndex(vec2 v, int32_t width) {
 	return (int32_t)v.x + (int32_t)v.y * width;
 }
 
-inline b32 Vec2Equals(vec2 v1, vec2 v2) {
+inline bool Vec2Equals(vec2 v1, vec2 v2) {
 	return (b32)((v1.x == v2.x) && (v1.y == v2.y));
 }
 
@@ -83,7 +81,7 @@ inline vec3 UpVec() {
 	return { 0.0f, 1.0f, 0.0f };
 }
 
-inline b32 VecEquals(vec3 v1, vec3 v2) {
+inline bool VecEquals(vec3 v1, vec3 v2) {
 	return (b32)((v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z));
 }
 
