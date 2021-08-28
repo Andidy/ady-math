@@ -53,7 +53,7 @@ inline int32_t Vec2To1DIndex(vec2 v, int32_t width) {
 }
 
 inline bool Vec2Equals(vec2 v1, vec2 v2) {
-	return (b32)((v1.x == v2.x) && (v1.y == v2.y));
+	return (bool)((v1.x == v2.x) && (v1.y == v2.y));
 }
 
 // Vector 3 ----------------------------------------------------------------
@@ -82,7 +82,7 @@ inline vec3 UpVec() {
 }
 
 inline bool VecEquals(vec3 v1, vec3 v2) {
-	return (b32)((v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z));
+	return (bool)((v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z));
 }
 
 inline vec3 NegVec(vec3 v1) {
