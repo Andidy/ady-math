@@ -32,52 +32,70 @@ union vec2 {
 	struct { float x; float y; };
 	struct { float u; float v; };
 	float data[2];
+
+	bool operator== (vec2 v) {
+		return (x == v.x) && (y == v.y);
+	}
+
+	bool operator!= (vec2 v) {
+		return !((x == v.x) && (y == v.y));
+	}
+
+	vec2 operator+ (vec2 v) {
+		return { x + v.x, y + v.y };
+	}
+
+	vec2 operator- (vec2 v) {
+		return { x - v.x, y - v.y };
+	}
+
+	vec2 operator* (float s) {
+		return { x * s, y * s };
+	}
+
+	void operator+= (vec2 v) {
+		x += v.x;
+		y += v.y;
+	}
+
+	void operator-= (vec2 v) {
+		x -= v.x;
+		y -= v.y;
+	}
+
+	void operator*= (float s) {
+		x *= s;
+		y *= s;
+	}
+
+	inline float Len();
 };
 
 inline vec2 Vec2(float x, float y) {
 	return { x, y };
 }
 
-inline bool Vec2Equals(vec2 v1, vec2 v2) {
-	return (bool)((v1.x == v2.x) && (v1.y == v2.y));
-}
-
-inline vec2 Vec2Add(vec2 v1, vec2 v2) {
-	vec2 result = { 0.0f, 0.0f };
-	result.x = v1.x + v2.x;
-	result.y = v1.y + v2.y;
-	return result;
-}
-
-inline vec2 Vec2Sub(vec2 v1, vec2 v2) {
-	vec2 result = { 0.0f, 0.0f };
-	result.x = v1.x - v2.x;
-	result.y = v1.y - v2.y;
-	return result;
-}
-
-inline vec2 Vec2Scale(vec2 v, float s) {
-	return { v.x * s, v.y * s };
-}
-
-inline float Vec2Dot(vec2 v1, vec2 v2) {
+inline float Dot(vec2 v1, vec2 v2) {
 	return v1.x * v2.x + v1.y * v2.y;
 }
 
-inline float Vec2Distance(vec2 v1, vec2 v2) {
-	vec2 dist = Vec2Sub(v2, v1);
-	return sqrtf(Vec2Dot(dist, dist));
+inline float Distance(vec2 v1, vec2 v2) {
+	vec2 dist = v2 - v1;
+	return sqrtf(Dot(dist, dist));
 }
 
-inline float Vec2Len(vec2 v) {
-	return sqrtf(Vec2Dot(v, v));
+inline float vec2::Len() {
+	vec2 v = *this;
+	return sqrtf(Dot(v, v));
 }
 
-inline vec2 Vec2Norm(vec2 v) {
-	float len = Vec2Len(v);
+inline vec2 Normalize(vec2 v) {
+	float len = v.Len();
 	len = (len == 0.0f) ? 1.0f : 1.0f / len;
-	return Vec2Scale(v, len);
+	return v * len;
 }
+
+// int vector 2 ------------------------------------------------------------
 
 union ivec2 {
 	struct { int32_t x; int32_t y; };
@@ -100,6 +118,46 @@ union vec3 {
 	struct { float u; float v; float w; };
 	struct { float r; float g; float b; };
 	float data[3];
+
+	inline bool operator== (vec3 v) {
+		return (x == v.x) && (y == v.y) && (z == v.z);
+	}
+
+	inline vec3 operator- () {
+		return { -1.0f * x, -1.0f * y, -1.0f * z };
+	}
+
+	inline vec3 operator+ (vec3 v) {
+		return { x + v.x, y + v.y, z + v.z };
+	}
+
+	inline vec3 operator- (vec3 v) {
+		return { x - v.x, y - v.y, z - v.z };
+	}
+
+	inline vec3 operator* (float s) {
+		return { x * s, y * s, z * s };
+	}
+
+	inline void operator+= (vec3 v) {
+		x += v.x;
+		y += v.y;
+		z += v.z;
+	}
+
+	inline void operator-= (vec3 v) {
+		x -= v.x;
+		y -= v.y;
+		z -= v.z;
+	}
+
+	inline void operator*= (float s) {
+		x *= s;
+		y *= s;
+		z *= s;
+	}
+
+	inline float Len();
 };
 
 inline vec3 Vec3(float x, float y, float z) {
@@ -118,24 +176,8 @@ inline vec3 UpVec() {
 	return { 0.0f, 1.0f, 0.0f };
 }
 
-inline bool VecEquals(vec3 v1, vec3 v2) {
-	return (bool)((v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z));
-}
-
 inline vec3 NegVec(vec3 v1) {
 	return { -1.0f * v1.x, -1.0f * v1.y, -1.0f * v1.z };
-}
-
-inline vec3 AddVec(vec3 v1, vec3 v2) {
-	return { v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
-}
-
-inline vec3 SubVec(vec3 v1, vec3 v2) {
-	return { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
-}
-
-inline vec3 ScaleVec(vec3 v1, float f) {
-	return { v1.x * f, v1.y * f, v1.z * f };
 }
 
 inline vec3 MulVec(vec3 v1, vec3 v2) {
@@ -153,19 +195,19 @@ inline vec3 Cross(vec3 v1, vec3 v2) {
 }
 
 inline float Distance(vec3 v1, vec3 v2) {
-	vec3 dist = SubVec(v2, v1);
+	vec3 dist = v2 - v1;
 	return sqrtf(Dot(dist, dist));
 }
 
-// TODO: Replace sqrtf with custom implementation?
-inline float VecLen(vec3 v) {
+inline float vec3::Len() {
+	vec3 v = *this;
 	return sqrtf(Dot(v, v));
 }
 
-inline vec3 NormVec(vec3 v) {
-	float len = VecLen(v);
+inline vec3 Normalize(vec3 v) {
+	float len = v.Len();
 	len = (len == 0.0f) ? 1.0f : 1.0f / len;
-	return ScaleVec(v, len);
+	return v * len;
 }
 
 // Vector 4 ----------------------------------------------------------------
@@ -336,7 +378,7 @@ inline mat4 RotateMatZ(float angle) {
 // Note: angle is in degrees, axis will be normalized internally
 inline mat4 RotateMat(float angle, vec3 axis) {
 	mat4 result = DiagonalMat(1.0f);
-	axis = NormVec(axis);
+	axis = Normalize(axis);
 
 	float sin = sinf(DegToRad(angle));
 	float cos = cosf(DegToRad(angle));
@@ -360,8 +402,8 @@ inline mat4 RotateMat(float angle, vec3 axis) {
 inline mat4 LookAtMat(vec3 eye, vec3 target, vec3 up) {
 	mat4 result = {};
 
-	vec3 n = NormVec(SubVec(eye, target));
-	vec3 u = NormVec(Cross(up, n));
+	vec3 n = Normalize(eye - target);
+	vec3 u = Normalize(Cross(up, n));
 	vec3 v = Cross(n, u);
 
 	vec3 neg_eye = NegVec(eye);
@@ -392,8 +434,8 @@ inline mat4 LookAtMat(vec3 eye, vec3 target, vec3 up) {
 inline mat4 InverseLookAtMat(vec3 eye, vec3 target, vec3 up) {
 	mat4 result = {};
 
-	vec3 n = NormVec(SubVec(eye, target));
-	vec3 u = NormVec(Cross(up, n));
+	vec3 n = Normalize(eye - target);
+	vec3 u = Normalize(Cross(up, n));
 	vec3 v = Cross(n, u);
 
 	//vec3 neg_eye = NegVec(eye);
