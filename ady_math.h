@@ -239,35 +239,49 @@ inline vec4 Vec4(float x, float y, float z, float w) {
 //
 struct mat4 {
 	float data[4][4];
-};
 
-inline vec4 MulMatVec(mat4 m, vec4 v) {
-	vec4 result = Vec4(0.0f, 0.0f, 0.0f, 0.0f);
+	inline vec4 operator* (vec4 v) {
+		vec4 result = Vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
-	for (int row = 0; row < 4; row++) {
-		float sum = 0.0f;
-		for (int col = 0; col < 4; col++) {
-			sum += m.data[row][col] * v.data[col];
-		}
-		result.data[row] = sum;
-	}
-
-	return result;
-}
-
-inline mat4 MulMat(mat4 m2, mat4 m1) {
-	mat4 result = {};
-	for (int row = 0; row < 4; row++) {
-		for (int col = 0; col < 4; col++) {
-			float sum = 0;
-			for (int i = 0; i < 4; i++) {
-				sum += m2.data[row][i] * m1.data[i][col];
+		for (int row = 0; row < 4; row++) {
+			float sum = 0.0f;
+			for (int col = 0; col < 4; col++) {
+				sum += data[row][col] * v.data[col];
 			}
-			result.data[row][col] = sum;
+			result.data[row] = sum;
 		}
+
+		return result;
 	}
-	return result;
-}
+
+	inline mat4 operator* (mat4 m) {
+		mat4 result = {};
+		for (int row = 0; row < 4; row++) {
+			for (int col = 0; col < 4; col++) {
+				float sum = 0;
+				for (int i = 0; i < 4; i++) {
+					sum += data[row][i] * m.data[i][col];
+				}
+				result.data[row][col] = sum;
+			}
+		}
+		return result;
+	}
+
+	inline void operator*= (mat4 m) {
+		mat4 result = {};
+		for (int row = 0; row < 4; row++) {
+			for (int col = 0; col < 4; col++) {
+				float sum = 0;
+				for (int i = 0; i < 4; i++) {
+					sum += data[row][i] * m.data[i][col];
+				}
+				result.data[row][col] = sum;
+			}
+		}
+		*this = result;
+	}
+};
 
 inline mat4 DiagonalMat(float diag) {
 	mat4 result = {};
