@@ -38,6 +38,47 @@ inline vec2 Vec2(float x, float y) {
 	return { x, y };
 }
 
+inline bool Vec2Equals(vec2 v1, vec2 v2) {
+	return (bool)((v1.x == v2.x) && (v1.y == v2.y));
+}
+
+inline vec2 Vec2Add(vec2 v1, vec2 v2) {
+	vec2 result = { 0.0f, 0.0f };
+	result.x = v1.x + v2.x;
+	result.y = v1.y + v2.y;
+	return result;
+}
+
+inline vec2 Vec2Sub(vec2 v1, vec2 v2) {
+	vec2 result = { 0.0f, 0.0f };
+	result.x = v1.x - v2.x;
+	result.y = v1.y - v2.y;
+	return result;
+}
+
+inline vec2 Vec2Scale(vec2 v, float s) {
+	return { v.x * s, v.y * s };
+}
+
+inline float Vec2Dot(vec2 v1, vec2 v2) {
+	return v1.x * v2.x + v1.y * v2.y;
+}
+
+inline float Vec2Distance(vec2 v1, vec2 v2) {
+	vec2 dist = Vec2Sub(v2, v1);
+	return sqrtf(Vec2Dot(dist, dist));
+}
+
+inline float Vec2Len(vec2 v) {
+	return sqrtf(Vec2Dot(v, v));
+}
+
+inline vec2 Vec2Norm(vec2 v) {
+	float len = Vec2Len(v);
+	len = (len == 0.0f) ? 1.0f : 1.0f / len;
+	return Vec2Scale(v, len);
+}
+
 union ivec2 {
 	struct { int32_t x; int32_t y; };
 	struct { int32_t u; int32_t v; };
@@ -50,10 +91,6 @@ inline ivec2 IVec2(int32_t x, int32_t y) {
 
 inline int32_t Vec2To1DIndex(vec2 v, int32_t width) {
 	return (int32_t)v.x + (int32_t)v.y * width;
-}
-
-inline bool Vec2Equals(vec2 v1, vec2 v2) {
-	return (bool)((v1.x == v2.x) && (v1.y == v2.y));
 }
 
 // Vector 3 ----------------------------------------------------------------
