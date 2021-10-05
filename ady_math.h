@@ -198,8 +198,8 @@ inline vec3 Cross(vec3 v1, vec3 v2) {
 			 v1.x * v2.y - v1.y * v2.x };
 }
 
-inline float Distance(vec3 v1, vec3 v2) {
-	vec3 dist = v2 - v1;
+inline float Distance(vec3 source, vec3 destination) {
+	vec3 dist = destination - source;
 	return sqrtf(Dot(dist, dist));
 }
 
