@@ -26,6 +26,10 @@ inline float DegToRad(float angle) {
 	return (angle * (PI / 180.0f));
 }
 
+inline float RadToDeg(float radian) {
+	return (radian * 180.0f) / PI;
+}
+
 // Vector 2 ----------------------------------------------------------------
 
 union vec2 {
