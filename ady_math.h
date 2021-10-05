@@ -83,8 +83,8 @@ inline float Dot(vec2 v1, vec2 v2) {
 	return v1.x * v2.x + v1.y * v2.y;
 }
 
-inline float Distance(vec2 v1, vec2 v2) {
-	vec2 dist = v2 - v1;
+inline float Distance(vec2 source, vec2 destination) {
+	vec2 dist = destination - source;
 	return sqrtf(Dot(dist, dist));
 }
 
